@@ -10,7 +10,7 @@ public class App {
 
         private static final String FILE = "Monitor.txt";
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws IOException {
 
         try {
             Monitor monitor = new Monitor("Dell", "RLO1234", "9865");
@@ -22,8 +22,6 @@ public class App {
             System.out.println(monitor);
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
