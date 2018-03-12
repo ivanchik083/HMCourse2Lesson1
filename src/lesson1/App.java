@@ -1,27 +1,41 @@
 package lesson1;
 
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.lang.reflect.Field;
 
 public class App {
 
-        private static final String FILE = "Monitor.txt";
+    static String FILE = "Monitor.txt";
+    static String s;
 
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) {
 
         try {
-            Monitor monitor = new Monitor("Dell", "RLO1234", "9865");
-            final FileOutputStream fos = new FileOutputStream(FILE);
-            final ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(monitor);
-            oos.close();
+            BufferedReader br = new BufferedReader(new FileReader(FILE));
+            while ((s = br.readLine()) !=null ) {
+                String[] pars  = s.split(",");
 
-            System.out.println(monitor);
+                Monitor monitor = new Monitor(pars[0], pars[1], pars[2]);
+                Class monitorClass = monitor.getClass();
+                Field nf = monitorClass.getDeclaredField("brand");
+                nf.setAccessible(true);
+
+
+                System.out.println(monitor.toString());
+                System.out.println("++++++++++++++++++");
+
+
+            }
+            br.close();
+
+
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
 
