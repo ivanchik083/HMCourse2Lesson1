@@ -8,10 +8,8 @@ public class Monitor {
     private String price;
 
 
-    public Monitor(String brand, String model, String price) {
-        this.brand = brand;
-        this.model = model;
-        this.price = price;
+    public static Monitor createMonitor(){
+        return new Monitor();
     }
 
     public String getBrand() {

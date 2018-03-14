@@ -9,18 +9,24 @@ public class App {
     static String s;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(FILE));
             while ((s = br.readLine()) !=null ) {
                 String[] pars  = s.split(",");
 
-                Monitor monitor = new Monitor(pars[0], pars[1], pars[2]);
-                Class monitorClass = monitor.getClass();
+                Monitor monitor = Monitor.createMonitor();
+               Class monitorClass = monitor.getClass();
                 Field nf = monitorClass.getDeclaredField("brand");
                 nf.setAccessible(true);
-
+                nf.set(monitor, pars[0]);
+                Field nf1 = monitorClass.getDeclaredField("model");
+                nf1.setAccessible(true);
+                nf1.set(monitor, pars[1]);
+                Field nf2 = monitorClass.getDeclaredField("price");
+                nf2.setAccessible(true);
+                nf2.set(monitor, pars[2]);
 
                 System.out.println(monitor.toString());
                 System.out.println("++++++++++++++++++");
