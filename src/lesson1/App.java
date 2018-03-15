@@ -1,29 +1,47 @@
 package lesson1;
 
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.lang.reflect.Field;
 
 public class App {
 
-        private static final String FILE = "Monitor.txt";
+    static String FILE = "Monitor.txt";
+    static String s;
 
-    public static void main(String[] args)  {
+
+    public static void main(String[] args) throws IllegalAccessException {
 
         try {
-            Monitor monitor = new Monitor("Dell", "RLO1234", "9865");
-            final FileOutputStream fos = new FileOutputStream(FILE);
-            final ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(monitor);
-            oos.close();
+            BufferedReader br = new BufferedReader(new FileReader(FILE));
+            while ((s = br.readLine()) !=null ) {
+                String[] pars  = s.split(",");
 
-            System.out.println(monitor);
+                Monitor monitor = Monitor.createMonitor();
+               Class monitorClass = monitor.getClass();
+                Field nf = monitorClass.getDeclaredField("brand");
+                nf.setAccessible(true);
+                nf.set(monitor, pars[0]);
+                Field nf1 = monitorClass.getDeclaredField("model");
+                nf1.setAccessible(true);
+                nf1.set(monitor, pars[1]);
+                Field nf2 = monitorClass.getDeclaredField("price");
+                nf2.setAccessible(true);
+                nf2.set(monitor, pars[2]);
+
+                System.out.println(monitor.toString());
+                System.out.println("++++++++++++++++++");
+
+
+            }
+            br.close();
+
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
 
